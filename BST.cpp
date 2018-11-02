@@ -10,10 +10,10 @@ using namespace std;
 class Node
 {
 public:
-	Node(string word, int frequency)
+	Node(string word)
     {
 		this->word = word;
-        this->frequency = frequency;
+        this->frequency = 1;
 		this->leftChild = NULL;
 		this->rightChild = NULL;
 	}
@@ -29,7 +29,7 @@ void addNewNode(Node* node, string word, int frequency)
 {
     if(node == NULL) //creates the node if there are no node present at this point
     {
-        node = new Node(word, 1);  //DOESNT WORK, EXPECTS 0 ARGMENTS FOR SOME REASON
+        node = new Node(word);
         return;
     }
     
