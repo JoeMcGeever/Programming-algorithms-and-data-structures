@@ -81,20 +81,28 @@ void constructTree()
     vector<string> binaryTree;
     textFile.open("textFile.txt");
     string word;
+//    bool firstWord = true;
+    
+    
     
     while(getline(textFile, word)) //word would equal the line in the file - change to word
     {
+//        if(firstWord)
+//        {
+//            Node* binaryTree = addNewNode(0, word); //as from moodle link
+//        }
         if(word!="")
         {
             //remove punctuation here!!
             addNewNode(0, word); //first parameter should be the first parent node, not sure how to tho ;( buut example just passes 0 so :ascii shrug:
         }
+//        firstWord = false;
     }
     textFile.close();
     
 }
 
-void findWord(word)
+void findWord()
 {
     
 }
