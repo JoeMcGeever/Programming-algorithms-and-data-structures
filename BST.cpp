@@ -29,50 +29,68 @@ public:
 
 Node* addNewNode(Node* node, string word)
 {
-    if(node == NULL) //creates the node if there are no node present at this point
+    
+    if(node==NULL) //creates the node if there are no node present at this point
     {
         node = new Node(word);
         return node;
     }
-    
     char asciiFinder, asciiCompare;
     int letterCounter = 0;
-    
     for(letterCounter; letterCounter < word.size(); letterCounter++)
     {
+        
+        
         asciiFinder = word[letterCounter]; //get the first letter of the word in question
-        tolower(asciiFinder); //convert to lower case (I consider "the" and The" to be the same word)
+        asciiFinder = tolower(asciiFinder); //convert to lower case (I consider "the" and The" to be the same word)
     
+        
         asciiCompare = node->word[letterCounter]; //get the 1st letter of the parent node
-        tolower(asciiCompare);
-    
+        asciiCompare = tolower(asciiCompare);
+        
+        
+        
+        
         if(int(asciiCompare) > int(asciiFinder)) //the further down the alphabet, the higher the ascii char
         { 
-            if(node->leftChild->parentNode==NULL) //If the next node is empty, then set this node as the next nodes parent
+            if(node->leftChild==NULL) //if there isnt a left child
             {
-                node->leftChild->parentNode = node;
+                node->leftChild = new Node(word); //then this word becomes the left child
+                node->leftChild->parentNode = node; //pointer to its parent
+                break;
             }
-            addNewNode(node->leftChild, word); //re-call function adding to next node, the word and 1 (represents first time this word is used)
+            else
+            {
+                addNewNode(node->leftChild, word);
+                break;
+            }
         }
         
         
         else if(int(asciiCompare) < int(asciiFinder))
         {
-            if(node->rightChild->parentNode=NULL) //If the next node is empty, then set this node as the next nodes parent
+            if(node->rightChild==NULL)
             {
+                node->rightChild = new Node(word);
                 node->rightChild->parentNode = node;
+                break;
             }
-            addNewNode(node->rightChild, word); // same as before but to the right
+            else
+            {
+                addNewNode(node->rightChild, word);
+                break;
+            }
         }
         
         
         else if(int(asciiCompare) == int(asciiFinder) && word.size() == node->word.size() == letterCounter-1) //if the letter is the same and its the last letter of both, add one to frequency at this node
         {
             node->frequency++; //add 1 to frequency as this word was already present
+            break;
         }
     }
     
-    
+    return node;
 }
 
 Node* constructTree()
@@ -84,15 +102,14 @@ Node* constructTree()
     Node* binaryTree;
     
     
-    while(getline(textFile, word)) //word would equal the line in the file - change to word
-    {
+    while(textFile >> word) //word would equal the line in the file - change to word!! HERE
+    {   
         if(firstWord)
         {
             binaryTree = addNewNode(0, word); //as from moodle link
         }
-        if(word!="")
+        else if(word!="")
         {
-            //NEED TO SPLIT INTO WORDS
             addNewNode(binaryTree, word); //first parameter should be the first parent node, not sure how to tho ;( buut example just passes 0 so :ascii shrug:
         }
         firstWord = false;
@@ -110,15 +127,18 @@ void findWord()
 
 void preOrder(Node* binaryTree)
 {
+
+   
+    
     if(binaryTree->word.empty()==false) //if there is a word present
     {
         cout << binaryTree->word << " : frequency : " << binaryTree->frequency << endl;
     }
-    if(binaryTree->leftChild->word.empty()==false)
+    if(binaryTree->leftChild!=NULL) //if left child is present, do search again
     {
         preOrder(binaryTree->leftChild); //go left down the tree
     }
-    if(binaryTree->rightChild->word.empty()==false)
+    if(binaryTree->rightChild!=NULL)
     {
         preOrder(binaryTree->rightChild); //go right down the tree
     }
