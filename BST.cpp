@@ -47,18 +47,15 @@ void addNewNode(Node* node, string word)
         tolower(asciiCompare);
     
         if(int(asciiCompare) > int(asciiFinder)) //the further down the alphabet, the higher the ascii char
-        {
-            
-            
+        { 
             if(node->leftChild->parentNode==NULL) //If the next node is empty, then set this node as the next nodes parent
             {
                 node->leftChild->parentNode = node;
             }
             addNewNode(node->leftChild, word); //re-call function adding to next node, the word and 1 (represents first time this word is used)
-       
-        
-        
         }
+        
+        
         else if(int(asciiCompare) < int(asciiFinder))
         {
             if(node->rightChild->parentNode=NULL) //If the next node is empty, then set this node as the next nodes parent
@@ -66,9 +63,9 @@ void addNewNode(Node* node, string word)
                 node->rightChild->parentNode = node;
             }
             addNewNode(node->rightChild, word); // same as before but to the right
-        
-        
         }
+        
+        
         else if(int(asciiCompare) == int(asciiFinder) && word.size() == node->word.size() == letterCounter-1) //if the letter is the same and its the last letter of both, add one to frequency at this node
         {
             node->frequency++; //add 1 to frequency as this word was already present
@@ -78,7 +75,7 @@ void addNewNode(Node* node, string word)
     
 }
 
-vector<int> constructTree()
+void constructTree()
 {
     ifstream textFile;
     vector<string> binaryTree;
@@ -97,7 +94,17 @@ vector<int> constructTree()
     
 }
 
-int main()
+void findWord(word)
 {
     
+}
+
+void preOrder()
+{
+
+}
+
+int main()
+{
+    constructTree();
 }
