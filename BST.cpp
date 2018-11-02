@@ -27,12 +27,12 @@ public:
 };
 
 
-void addNewNode(Node* node, string word)
+Node* addNewNode(Node* node, string word)
 {
     if(node == NULL) //creates the node if there are no node present at this point
     {
         node = new Node(word);
-        return;
+        return node;
     }
     
     char asciiFinder, asciiCompare;
@@ -75,30 +75,31 @@ void addNewNode(Node* node, string word)
     
 }
 
-void constructTree()
+Node* constructTree()
 {
     ifstream textFile;
-    vector<string> binaryTree;
     textFile.open("textFile.txt");
     string word;
-//    bool firstWord = true;
-    
+    bool firstWord = true;
+    Node* binaryTree;
     
     
     while(getline(textFile, word)) //word would equal the line in the file - change to word
     {
-//        if(firstWord)
-//        {
-//            Node* binaryTree = addNewNode(0, word); //as from moodle link
-//        }
+        if(firstWord)
+        {
+            binaryTree = addNewNode(0, word); //as from moodle link
+        }
         if(word!="")
         {
-            //remove punctuation here!!
-            addNewNode(0, word); //first parameter should be the first parent node, not sure how to tho ;( buut example just passes 0 so :ascii shrug:
+            //NEED TO SPLIT INTO WORDS
+            addNewNode(binaryTree, word); //first parameter should be the first parent node, not sure how to tho ;( buut example just passes 0 so :ascii shrug:
         }
-//        firstWord = false;
+        firstWord = false;
     }
     textFile.close();
+    
+    return binaryTree;
     
 }
 
@@ -107,12 +108,25 @@ void findWord()
     
 }
 
-void preOrder()
+void preOrder(Node* binaryTree)
 {
-
+    if(binaryTree->word.empty()==false) //if there is a word present
+    {
+        cout << binaryTree->word << " : frequency : " << binaryTree->frequency << endl;
+    }
+    if(binaryTree->leftChild->word.empty()==false)
+    {
+        preOrder(binaryTree->leftChild); //go left down the tree
+    }
+    if(binaryTree->rightChild->word.empty()==false)
+    {
+        preOrder(binaryTree->rightChild); //go right down the tree
+    }
 }
 
 int main()
 {
-    constructTree();
+    Node* binaryTree;
+    binaryTree = constructTree();
+    preOrder(binaryTree);
 }
