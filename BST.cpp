@@ -7,13 +7,23 @@ using namespace std;
 
 //alphabetically store using ascii values to determine position(capital letters should not affect)
 
-struct Node
+class Node
 {
-    string word;
+public:
+	Node(string word, int frequency)
+    {
+		this->word = word;
+        this->frequency = frequency;
+		this->leftChild = NULL;
+		this->rightChild = NULL;
+	}
+	string word;
     int frequency;
-    Node* leftChild;
-    Node* rightChild;
+	Node* leftChild;
+	Node* rightChild;
+
 };
+
 
 void addNewNode(Node* node, string word, int frequency)
 {
