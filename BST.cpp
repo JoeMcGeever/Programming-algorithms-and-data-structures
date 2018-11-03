@@ -120,9 +120,48 @@ Node* constructTree()
     
 }
 
-void findWord()
+
+bool findWord(Node* node, string word)
 {
-    
+    char asciiFinder, asciiCompare;
+    int letterCounter = 0;
+    cout << "Node observed: " << node->word << " VS " << word << " target Node" << endl;
+    if(node->word==word)
+    {
+        return true;
+    }
+    for(letterCounter; letterCounter < word.size(); letterCounter++)
+    {
+        asciiFinder = word[letterCounter]; //get the first letter of the word in question
+        asciiFinder = tolower(asciiFinder); //convert to lower case (I consider "the" and The" to be the same word)   
+        asciiCompare = node->word[letterCounter]; //get the 1st letter of the parent node
+        asciiCompare = tolower(asciiCompare);
+
+        if(int(asciiCompare) > int(asciiFinder)) //the further down the alphabet, the higher the ascii char
+        { 
+            if(node->leftChild==NULL) //if there isnt a left child
+            {
+                return false;
+            }
+            else
+            {
+                cout << "Going left" << endl;
+                return findWord(node->leftChild, word);
+            }
+        }  
+        else if(int(asciiCompare) < int(asciiFinder))
+        {
+            if(node->rightChild==NULL)
+            {
+                return false;
+            }
+            else
+            {
+                cout << "Going right" << endl;
+                return findWord(node->rightChild, word);
+            }
+        }     
+    }
 }
 
 void preOrder(Node* binaryTree)
@@ -146,7 +185,18 @@ void preOrder(Node* binaryTree)
 
 int main()
 {
+    string target;
     Node* binaryTree;
     binaryTree = constructTree();
     preOrder(binaryTree);
+    cout << "Enter the word you want to find" << endl;
+    cin >> target;
+    if(findWord(binaryTree, target) == true)
+    {
+        cout << "Word found" << endl;
+    }
+    else
+    {
+        cout << "Word not found" << endl;
+    }
 }
