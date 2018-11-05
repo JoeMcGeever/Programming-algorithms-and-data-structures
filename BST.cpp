@@ -121,14 +121,14 @@ Node* constructTree()
 }
 
 
-bool findWord(Node* node, string word)
+Node* findWord(Node* node, string word)
 {
     char asciiFinder, asciiCompare;
     int letterCounter = 0;
     cout << "Node observed: " << node->word << " VS " << word << " target Node" << endl;
     if(node->word==word)
     {
-        return true;
+        return node;
     }
     for(letterCounter; letterCounter < word.size(); letterCounter++)
     {
@@ -141,7 +141,7 @@ bool findWord(Node* node, string word)
         { 
             if(node->leftChild==NULL) //if there isnt a left child
             {
-                return false;
+                return NULL;
             }
             else
             {
@@ -153,7 +153,7 @@ bool findWord(Node* node, string word)
         {
             if(node->rightChild==NULL)
             {
-                return false;
+                return NULL;
             }
             else
             {
@@ -183,6 +183,67 @@ void preOrder(Node* binaryTree)
     }
 }
 
+
+Node* deleteNode(Node* node, string word)
+{
+    
+    node = findWord(node, word);
+    if(node->leftChild == NULL && node->rightChild == NULL) //no children
+    {
+        if(node->parentNode->leftChild->word == node->word) //if the node is the left child
+        {
+            node->parentNode->leftChild = NULL; //set the parents pointer to the node as null
+        }
+        else
+        {
+            node->parentNode->rightChild = NULL; //otherwise the node is a right child
+        }
+        return node;
+    }
+    
+    if(node->leftChild == NULL && node->rightChild != NULL) //one child (on the right)
+    {
+        if(node->parentNode->leftChild->word == node->word) //if the node to be deleted is the left child
+        {
+            node->parentNode->leftChild = node->rightChild; //the parent now points to this nodes right child
+        }
+        else
+        {
+            node->parentNode->rightChild = node->rightChild; //the parent points to the node to be deleteds left child
+        }
+        return node;
+    }
+    if(node->leftChild != NULL && node->rightChild == NULL) //one child (on the left)
+    {
+        if(node->parentNode->leftChild->word == node->word) //if the node to be deleted is the  left child
+        {
+            node->parentNode->leftChild = node->leftChild; //the deleted nodes parent points to the left child of the deleted node
+        }
+        else
+        {
+            node->parentNode->rightChild = node->leftChild; //same but the parents right pointer points to the nodes left child
+        }
+        return node;
+    }
+    
+    if(node->leftChild != NULL && node->rightChild != NULL) //two children
+        // copy the right trees smallest key to the node to be deleted, and then delete the node that was copied
+        // smallest one will be the leftmost node off the right child to the node to be deleted
+    {
+        Node* swapNode = node->rightChild; //swapNode is the smallest node off the right tree
+        while(swapNode->leftChild!=NULL) //while there is a left child,  this node is not the smallest
+        {
+            swapNode = swapNode->leftChild;
+        }
+        node = deleteNode(swapNode, swapNode->word); //delete the node that has been copied
+        node->word = swapNode->word; //copy the data to the orginal node to be deleted
+        node->frequency = swapNode ->frequency;
+        return node;
+    }
+    return node;
+    
+}
+
 int main()
 {
     string target;
@@ -191,7 +252,7 @@ int main()
     preOrder(binaryTree);
     cout << "Enter the word you want to find" << endl;
     cin >> target;
-    if(findWord(binaryTree, target) == true)
+    if(findWord(binaryTree, target) != NULL)
     {
         cout << "Word found" << endl;
     }
@@ -199,4 +260,18 @@ int main()
     {
         cout << "Word not found" << endl;
     }
+    cout << "Enter the word you wish to delete" << endl;
+    cin >> target;
+    binaryTree = deleteNode(binaryTree, target);
+    cout << "Enter the word you want to find" << endl;
+    cin >> target;
+    if(findWord(binaryTree, target) != NULL)
+    {
+        cout << "Word found" << endl;
+    }
+    else
+    {
+        cout << "Word not found" << endl;
+    }
+    
 }
