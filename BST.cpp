@@ -184,7 +184,7 @@ void preOrder(Node* binaryTree)
 }
 
 
-Node* deleteNode(Node* node, string word)
+void deleteNode(Node* node, string word)
 {
     
     node = findWord(node, word);
@@ -198,7 +198,7 @@ Node* deleteNode(Node* node, string word)
         {
             node->parentNode->rightChild = NULL; //otherwise the node is a right child
         }
-        return node;
+        return;
     }
     
     if(node->leftChild == NULL && node->rightChild != NULL) //one child (on the right)
@@ -211,7 +211,7 @@ Node* deleteNode(Node* node, string word)
         {
             node->parentNode->rightChild = node->rightChild; //the parent points to the node to be deleteds left child
         }
-        return node;
+        return ;
     }
     if(node->leftChild != NULL && node->rightChild == NULL) //one child (on the left)
     {
@@ -223,7 +223,7 @@ Node* deleteNode(Node* node, string word)
         {
             node->parentNode->rightChild = node->leftChild; //same but the parents right pointer points to the nodes left child
         }
-        return node;
+        return;
     }
     
     if(node->leftChild != NULL && node->rightChild != NULL) //two children
@@ -235,12 +235,12 @@ Node* deleteNode(Node* node, string word)
         {
             swapNode = swapNode->leftChild;
         }
-        node = deleteNode(swapNode, swapNode->word); //delete the node that has been copied
+        deleteNode(swapNode, swapNode->word); //delete the node that has been copied
         node->word = swapNode->word; //copy the data to the orginal node to be deleted
         node->frequency = swapNode ->frequency;
-        return node;
+        return;
     }
-    return node;
+    return;
     
 }
 
@@ -262,7 +262,7 @@ int main()
     }
     cout << "Enter the word you wish to delete" << endl;
     cin >> target;
-    binaryTree = deleteNode(binaryTree, target);
+    deleteNode(binaryTree, target);
     cout << "Enter the word you want to find" << endl;
     cin >> target;
     if(findWord(binaryTree, target) != NULL)
