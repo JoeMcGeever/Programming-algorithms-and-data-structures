@@ -1,14 +1,18 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <fstream>
 using namespace std;
 
-//ADD A NODE MEANS ADDING IT TO THE LIST OF NODES IN THE GRAPH CLASS, ADDING AN EDGE MEANS UPDATING THE ADJACENCY LIST OF BOTH NODES
+
+//CURRENTLY, IT SEEMS AS IF THE NODES ADJACENCY LIST NODES DONT HAVE AN UPDATED ADJACENCY LIST
+//SO JUST FIND THE NUMBER, AND SEARCH FOR IT WITHIN THE GRAPH AGAIN -_- 
 
 struct Node
 {
 public:
     int number;
+    bool visited = false;
     vector<Node> adjacenyList;
 	Node(int number)
     {
@@ -27,44 +31,98 @@ class graph
         graph.push_back(value);
         return;
     }
-    void addEdge(int valueOne, int valueTwo)
+    
+    
+    
+    
+    bool doesNodesExist(int valueOne, int valueTwo)
     {
         for(auto counter = 0; counter<graph.size(); counter++)
         {
             if(graph[counter].number==valueOne) //find the value in the vector of nodes in this object of class
             {
-                posOfOne = counter; //store the node position within the graph
                 oneSet = true;
             }
             if(graph[counter].number==valueTwo) //find the value
             {
-                posOfTwo = counter; //and for the second
                 twoSet = true;
             }
         }
-        if(oneSet==true && twoSet==true) //if they exist on the graph
+        if(oneSet == true && twoSet == true)
         {
-            graph[posOfOne].adjacenyList.push_back(graph[posOfTwo]); //ADD THE SECOND VALUE TO THE ADJACENCY LIST OF THE FIRST
-            graph[posOfTwo].adjacenyList.push_back(graph[posOfOne]); //SAME AS ABOVE BUT 1 IS GOIN IN 2
-            
-            
-            return;
+            return true;
         }
-        else
-        {
-            cout << "One or more nodes not present" << endl;
-            return;
-        }
+        return false;
     }
+    
+    
+    
+    
+    void addEdge(int valueOne, int valueTwo)
+    {
+        if(doesNodesExist(valueOne, valueTwo)!= true)
+        {
+            cout << "One or more nodes does not exist" << endl;
+            return;
+        }
+        for(auto counter = 0; counter<graph.size(); counter++)
+        {
+            if(graph[counter].number==valueOne) //find the value in the vector of nodes in this object of class
+            {
+                posOfOne = counter; //store the node position within the graph
+            }
+            if(graph[counter].number==valueTwo) //find the value
+            {
+                posOfTwo = counter; //and for the second
+            }
+        }
+        graph[posOfOne].adjacenyList.push_back(graph[posOfTwo]); //ADD THE SECOND VALUE TO THE ADJACENCY LIST OF THE FIRST
+        graph[posOfTwo].adjacenyList.push_back(graph[posOfOne]); //SAME AS ABOVE BUT 1 IS GOIN IN 2
+    }
+    
+    
+    
+    
+    bool isPath(int v,int w) //v = source, w = destination
+    {
+        for(auto counter = 0; counter<graph.size(); counter++)
+        {
+            if(graph[counter].number==v) //find the value in the vector of nodes in this object of class
+            {
+                posOfOne = counter; //store the node position within the graph
+                graph[posOfOne].visited = true; //set to true as it has been visited
+            }
+        }
+        
+        for(auto counter = 0; counter < graph[posOfOne].adjacenyList.size(); counter ++)
+        {
+            if(graph[posOfOne].adjacenyList[counter].number == w) //if the destination is in the adjacenyList
+            {
+                cout << "FOUND YA" << endl;
+                return true;
+            }
+        }
+        
+              
+        
+        
+        for(auto counter = 0; counter < graph[posOfOne].adjacenyList.size(); counter ++)
+        {
+            
+           if(graph[posOfOne].adjacenyList[counter].visited==false)
+           {
+               cout << graph[posOfOne].adjacenyList[counter].number << "     " << w << endl;
+               isPath(graph[posOfOne].adjacenyList[counter].number, w);
+           }
+        }
+    
+    return false;
+    }
+    
 };
 
 
-bool isPath(int v,int w)
-{
-    vector<int> nodeVisited;
-    
-    
-}
+
 
 
 
@@ -82,8 +140,10 @@ int main()
     myGraph.addNode(8);
     
     myGraph.addEdge(3, 5);
+    myGraph.addEdge(5, 2);
     myGraph.addEdge(2, 1);
     
-    cout << myGraph.graph[4].adjacenyList[0].number << endl;
+    
+    cout << myGraph.isPath(3,1) << endl; //DOESNT WORK
    
 }
