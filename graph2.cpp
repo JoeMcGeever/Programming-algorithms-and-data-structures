@@ -53,24 +53,37 @@ class Graph
     
     bool isPathNodeFinder(int value1, int value2)
     {
+        ofstream textFile;
         int pos1 = findPosOfNode(value1);
         int pos2 = findPosOfNode(value2);
-        bool pathResult = isPath(graph[pos1], graph[pos2]);
+        bool pathResult = isPath(graph[pos2], graph[pos1]);
         for(auto counter = 0; counter < graph.size(); counter ++) //resets the visited values
         {
             graph[counter].visited = false;
         }
-        
+        if(pathResult==true)
+        {
+            textFile.open("graphText.txt", std::ios_base::app);
+            string fileAdd = to_string(value2); //add the last value to the text file as it skips in my program once its found
+            textFile << fileAdd << " ";
+            textFile.close();
+        }
         return pathResult;
     }
     
     bool isPath(Node v, Node w)
     {
-        
+        ofstream textFile;
+        string fileAdd;
         for(auto counter = 0; counter < v.adjacenyList.size(); counter++) //loop through v's adjacenyList
         {
             if(w.number == v.adjacenyList[counter]->number) //if the node is foudn within this v's adjacency list
             {
+                cout << w.number << endl;
+                textFile.open("graphText.txt", std::ios_base::app); //APPENDS TO THE END OF THE FILE
+                fileAdd = to_string(w.number); //ADD TO THE TEXT FILE
+                textFile << fileAdd << "-";
+                textFile.close();
                 return true;
             }
         }
@@ -84,6 +97,10 @@ class Graph
                 int posOfNode = findPosOfNode(v.adjacenyList[counter]->number); //find the position of the node in the graph vector
                 if(isPath(graph[posOfNode], w)==true) //returns true only when the deeper level of recursion returns true for values in v's adjacency list
                 {
+                    textFile.open("graphText.txt", std::ios_base::app);
+                    fileAdd = to_string(graph[posOfNode].number); //ADD TO THE TEXT FILE
+                    textFile << fileAdd << "-";
+                    textFile.close();
                     return true;
                 }
             }
@@ -106,10 +123,9 @@ int main()
     myGraph.addEdge(3, 5);
     myGraph.addEdge(10, 5);
     myGraph.addEdge(10, 1);
-    cout << myGraph.graph[0].adjacenyList[0]->number << endl;
+    myGraph.addEdge(1, 4);
+//    cout << myGraph.graph[0].adjacenyList[0]->number << endl;
     
-    cout << myGraph.isPathNodeFinder(3, 5) << endl;
-    cout << myGraph.isPathNodeFinder(10, 3) << endl;
-    cout << myGraph.isPathNodeFinder(3, 1) << endl;
-    cout << myGraph.isPathNodeFinder(4, 5) << endl;
+    cout << myGraph.isPathNodeFinder(4, 3) << endl;
+    
 }
