@@ -112,6 +112,62 @@ class Graph
     
 };
 
+
+void BFS(Graph G, int firstNode)
+{
+    
+}
+
+Graph actionDFS(Graph g, int node, int posOfNode)
+{
+    g.graph[posOfNode].visited = true;
+    //WRONG
+    cout << g.graph[posOfNode].number << " is true" << endl;
+    //WRONG
+    int counter = 0;
+    for(counter; counter < g.graph[posOfNode].adjacenyList.size(); counter++);
+    {
+        posOfNode = g.findPosOfNode(g.graph[counter].number);
+        if(g.graph[posOfNode].visited==false)
+        {
+            actionDFS(g, g.graph[posOfNode].number, posOfNode);
+        }
+    }
+    return g;
+}
+
+void DFS(Graph g, int firstNode)
+{
+    int posOfNode = g.findPosOfNode(firstNode);
+    for(auto counter = 0; counter < g.graph.size(); counter ++) //resets the visited values
+    {
+         g.graph[counter].visited = false;
+    }
+    g = actionDFS(g, firstNode, posOfNode);
+    
+    for(auto counter2 = 0; counter2<g.graph.size(); counter2++)
+    {
+        if(g.graph[counter2].visited==false)
+        {
+           // cout << g.graph[counter2].number << endl;
+            cout << "Unconnected tree" << endl;
+            return;
+        }
+    }
+    cout << "Connected tree" << endl;
+    return;
+}
+
+
+
+bool isConnected(Graph G)
+{
+    int choice;
+    cout << "Choose your starting node" << endl;
+    cin >> choice;
+    DFS(G, choice);
+}
+
 int main()
 {
     Graph myGraph;
@@ -127,5 +183,8 @@ int main()
 //    cout << myGraph.graph[0].adjacenyList[0]->number << endl;
     
     cout << myGraph.isPathNodeFinder(4, 3) << endl;
+    
+    isConnected(myGraph);
+    
     
 }
