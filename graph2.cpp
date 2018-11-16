@@ -4,6 +4,7 @@
 #include <fstream>
 using namespace std;
 
+//FOR DIJKSTRAS ALGORITHM - USE MAX(INT) ISNETAD OF INFINI
 
 struct Node
 {
@@ -120,15 +121,22 @@ Graph actionDFS(Graph g, int node, int posOfNode)
     g.graph[posOfNode].visited = true;
     //WRONG
     cout << g.graph[posOfNode].number << " is true" << endl;
-    //WRONG dunno why it crashes here though ;(
-    int counter = 0;
-    for(counter; counter < g.graph[posOfNode].adjacenyList.size(); counter++);
+    //WRONG
+    for(auto counter = 0; counter < g.graph[posOfNode].adjacenyList.size(); counter++)
     {
+        //
+        cout << "Examining " << g.graph[posOfNode].number << " which has an adjacenyList size of " << g.graph[posOfNode].adjacenyList.size() << endl;
+        //
+        
         posOfNode = g.findPosOfNode(g.graph[posOfNode].adjacenyList[counter]->number);
+        
+        //
+        cout << " with " << g.graph[posOfNode].number << " which is " << g.graph[posOfNode].visited << endl;
+        //
+        
         if(g.graph[posOfNode].visited==false)
         {
-            
-            actionDFS(g, g.graph[posOfNode].number, posOfNode);
+            g = actionDFS(g, g.graph[posOfNode].number, posOfNode);
         }
     }
     return g;
