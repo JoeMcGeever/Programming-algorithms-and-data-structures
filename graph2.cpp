@@ -4,6 +4,10 @@
 #include <fstream>
 using namespace std;
 
+//NEED TO DO:
+//save to txt file for dfs
+//bfs traversal and saving
+//dijkstras algorithm for weighted graph
 //FOR DIJKSTRAS ALGORITHM - USE MAX(INT) ISNETAD OF INFINITY
 
 struct Node
@@ -77,7 +81,6 @@ class Graph
         {
             if(w.number == v.adjacenyList[counter]->number) //if the node is foudn within this v's adjacency list
             {
-                cout << w.number << endl;
                 textFile.open("graphText.txt", std::ios_base::app); //APPENDS TO THE END OF THE FILE
                 fileAdd = to_string(w.number); //ADD TO THE TEXT FILE
                 textFile << fileAdd << "-";
@@ -118,7 +121,12 @@ void BFS(Graph G, int firstNode)
 
 Graph actionDFS(Graph g, int node, int posOfNode)
 {
+    ofstream textFile;
     g.graph[posOfNode].visited = true;
+    textFile.open("pathDFS.txt", std::ios_base::app);
+    textFile << node << " ";
+    textFile.close();
+    
     for(auto counter = 0; counter < g.graph[posOfNode].adjacenyList.size(); counter++)
     {
         int posOfNode2 = g.findPosOfNode(g.graph[posOfNode].adjacenyList[counter]->number); // HAS TO BE NEW VARIABLE AS TO NOT MESS WITH THE FOR LOOP BEFORE
@@ -173,11 +181,14 @@ int main()
     myGraph.addEdge(10, 5);
     myGraph.addEdge(10, 1);
     myGraph.addEdge(1, 4);
-    cout << myGraph.graph[0].adjacenyList[0]->number << endl;
-    
-    cout << myGraph.isPathNodeFinder(4, 3) << endl;
+
+    if(myGraph.isPathNodeFinder(4, 3)==true)
+    {
+        cout << "There is a path" << endl;
+    }
     
     isConnected(myGraph);
+    
     
     
 }
