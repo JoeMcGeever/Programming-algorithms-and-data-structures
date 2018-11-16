@@ -5,9 +5,6 @@
 using namespace std;
 
 
-//CURRENTLY, IT SEEMS AS IF THE NODES ADJACENCY LIST NODES DONT HAVE AN UPDATED ADJACENCY LIST
-//SO JUST FIND THE NUMBER, AND SEARCH FOR IT WITHIN THE GRAPH AGAIN -_- 
-
 struct Node
 {
 public:
@@ -123,13 +120,14 @@ Graph actionDFS(Graph g, int node, int posOfNode)
     g.graph[posOfNode].visited = true;
     //WRONG
     cout << g.graph[posOfNode].number << " is true" << endl;
-    //WRONG
+    //WRONG dunno why it crashes here though ;(
     int counter = 0;
     for(counter; counter < g.graph[posOfNode].adjacenyList.size(); counter++);
     {
-        posOfNode = g.findPosOfNode(g.graph[counter].number);
+        posOfNode = g.findPosOfNode(g.graph[posOfNode].adjacenyList[counter]->number);
         if(g.graph[posOfNode].visited==false)
         {
+            
             actionDFS(g, g.graph[posOfNode].number, posOfNode);
         }
     }
