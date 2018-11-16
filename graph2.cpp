@@ -143,7 +143,6 @@ void DFS(Graph g, int firstNode)
     {
         if(g.graph[counter2].visited==false)
         {
-           // cout << g.graph[counter2].number << endl;
             cout << "Unconnected tree" << endl;
             return;
         }
