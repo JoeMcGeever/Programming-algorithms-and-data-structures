@@ -138,7 +138,7 @@ Graph actionDFS(Graph g, int node, int posOfNode)
     return g;
 }
 
-void DFS(Graph g, int firstNode)
+bool DFS(Graph g, int firstNode)
 {
     int posOfNode = g.findPosOfNode(firstNode);
     for(auto counter = 0; counter < g.graph.size(); counter ++) //resets the visited values
@@ -151,12 +151,10 @@ void DFS(Graph g, int firstNode)
     {
         if(g.graph[counter2].visited==false)
         {
-            cout << "Unconnected tree" << endl;
-            return;
+            return false;
         }
     }
-    cout << "Connected tree" << endl;
-    return;
+    return true;
 }
 
 
@@ -166,7 +164,14 @@ bool isConnected(Graph G)
     int choice;
     cout << "Choose your starting node" << endl;
     cin >> choice;
-    DFS(G, choice);
+    if(DFS(G, choice)==true)
+    {
+        cout << "Connected tree" << endl;
+    }
+    else
+    {
+        cout << "Unconnected tree" << endl;
+    }
 }
 
 int main()
