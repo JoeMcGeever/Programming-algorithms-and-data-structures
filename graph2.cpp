@@ -4,7 +4,7 @@
 #include <fstream>
 using namespace std;
 
-//FOR DIJKSTRAS ALGORITHM - USE MAX(INT) ISNETAD OF INFINI
+//FOR DIJKSTRAS ALGORITHM - USE MAX(INT) ISNETAD OF INFINITY
 
 struct Node
 {
@@ -119,24 +119,12 @@ void BFS(Graph G, int firstNode)
 Graph actionDFS(Graph g, int node, int posOfNode)
 {
     g.graph[posOfNode].visited = true;
-    //WRONG
-    cout << g.graph[posOfNode].number << " is true" << endl;
-    //WRONG
     for(auto counter = 0; counter < g.graph[posOfNode].adjacenyList.size(); counter++)
     {
-        //
-        cout << "Examining " << g.graph[posOfNode].number << " which has an adjacenyList size of " << g.graph[posOfNode].adjacenyList.size() << endl;
-        //
-        
-        posOfNode = g.findPosOfNode(g.graph[posOfNode].adjacenyList[counter]->number);
-        
-        //
-        cout << " with " << g.graph[posOfNode].number << " which is " << g.graph[posOfNode].visited << endl;
-        //
-        
-        if(g.graph[posOfNode].visited==false)
+        int posOfNode2 = g.findPosOfNode(g.graph[posOfNode].adjacenyList[counter]->number); // HAS TO BE NEW VARIABLE AS TO NOT MESS WITH THE FOR LOOP BEFORE
+        if(g.graph[posOfNode2].visited==false)
         {
-            g = actionDFS(g, g.graph[posOfNode].number, posOfNode);
+            g = actionDFS(g, g.graph[posOfNode2].number, posOfNode2);
         }
     }
     return g;
@@ -186,7 +174,7 @@ int main()
     myGraph.addEdge(10, 5);
     myGraph.addEdge(10, 1);
     myGraph.addEdge(1, 4);
-//    cout << myGraph.graph[0].adjacenyList[0]->number << endl;
+    cout << myGraph.graph[0].adjacenyList[0]->number << endl;
     
     cout << myGraph.isPathNodeFinder(4, 3) << endl;
     
