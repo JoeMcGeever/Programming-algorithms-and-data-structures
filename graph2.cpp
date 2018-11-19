@@ -5,10 +5,9 @@
 using namespace std;
 
 //NEED TO DO:
-//save to txt file for dfs
 //bfs traversal and saving
 //dijkstras algorithm for weighted graph
-//FOR DIJKSTRAS ALGORITHM - USE MAX(INT) ISNETAD OF INFINITY
+//FOR DIJKSTRAS ALGORITHM - USE MAX(INT) INSETAD OF INFINITY
 
 struct Node
 {
@@ -41,7 +40,7 @@ class Graph
                 return counter;
             }
         }
-        return 100;
+        return 1000;
     }
     void addEdge(int value1, int value2)
     {
@@ -114,8 +113,40 @@ class Graph
 };
 
 
-void BFS(Graph G, int firstNode)
+
+void BFS(Graph g, int node)
 {
+    ofstream textFile;
+    vector<int> queueBFS;
+    int posOfNode, posOfNode2, counter;
+    textFile.open("pathBFS.txt", std::ios_base::app); //open file
+    
+    for(auto counter = 0; counter < g.graph.size(); counter ++) //resets the visited values
+    {
+         g.graph[counter].visited = false;
+    }
+    
+    posOfNode = g.findPosOfNode(node);
+    queueBFS.push_back(posOfNode);
+    g.graph[posOfNode].visited = true;
+    textFile << g.graph[posOfNode].number << " ";
+    while(!queueBFS.empty())
+    {
+        posOfNode = queueBFS[0];
+        queueBFS.erase(queueBFS.begin());
+        for(counter = 0; counter<g.graph[posOfNode].adjacenyList.size(); counter ++)
+        {
+            posOfNode2 = g.findPosOfNode(g.graph[posOfNode].adjacenyList[counter]->number);
+            if(g.graph[posOfNode2].visited==false)
+            {
+                queueBFS.push_back(posOfNode2);
+                textFile << g.graph[posOfNode2].number << " ";
+                g.graph[posOfNode2].visited = true;
+            }
+        }
+    }
+    textFile.close();
+    
     
 }
 
@@ -157,8 +188,6 @@ bool DFS(Graph g, int firstNode)
     return true;
 }
 
-
-
 bool isConnected(Graph G)
 {
     int choice;
@@ -182,18 +211,34 @@ int main()
     myGraph.addNode(1);
     myGraph.addNode(10);
     myGraph.addNode(4);
+    myGraph.addNode(7);
+    myGraph.addNode(22);
+    myGraph.addNode(23);
     myGraph.addEdge(3, 5);
     myGraph.addEdge(10, 5);
     myGraph.addEdge(10, 1);
     myGraph.addEdge(1, 4);
+    myGraph.addEdge(3, 1);
+    myGraph.addEdge(7, 5);
+    myGraph.addEdge(7, 22);
+    myGraph.addEdge(7, 23);
 
     if(myGraph.isPathNodeFinder(4, 3)==true)
     {
         cout << "There is a path" << endl;
     }
     
-    isConnected(myGraph);
+    isConnected(myGraph); //uses DFS anyway
     
+    
+    int choice;
+    cout << "Choose your starting node" << endl;
+    cin >> choice;
+    for(auto counter = 0; counter < myGraph.graph.size(); counter ++) //resets the visited values
+    {
+        myGraph.graph[counter].visited = false;
+    }
+    BFS(myGraph, choice);
     
     
 }
