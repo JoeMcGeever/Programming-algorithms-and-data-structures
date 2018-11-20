@@ -5,7 +5,6 @@
 using namespace std;
 
 //NEED TO DO:
-//bfs traversal and saving
 //dijkstras algorithm for weighted graph
 //FOR DIJKSTRAS ALGORITHM - USE MAX(INT) INSETAD OF INFINITY
 
@@ -126,22 +125,22 @@ void BFS(Graph g, int node)
          g.graph[counter].visited = false;
     }
     
-    posOfNode = g.findPosOfNode(node);
-    queueBFS.push_back(posOfNode);
-    g.graph[posOfNode].visited = true;
+    posOfNode = g.findPosOfNode(node); 
+    queueBFS.push_back(posOfNode); //add to the queue the node
+    g.graph[posOfNode].visited = true; //set as true
     textFile << g.graph[posOfNode].number << " ";
-    while(!queueBFS.empty())
+    while(!queueBFS.empty()) //keep looping until queue is empty
     {
-        posOfNode = queueBFS[0];
-        queueBFS.erase(queueBFS.begin());
-        for(counter = 0; counter<g.graph[posOfNode].adjacenyList.size(); counter ++)
+        posOfNode = queueBFS[0]; //get first item from queue
+        queueBFS.erase(queueBFS.begin()); //and delete it from the queue
+        for(counter = 0; counter<g.graph[posOfNode].adjacenyList.size(); counter ++) //loop through the nodes adjacency list
         {
-            posOfNode2 = g.findPosOfNode(g.graph[posOfNode].adjacenyList[counter]->number);
-            if(g.graph[posOfNode2].visited==false)
+            posOfNode2 = g.findPosOfNode(g.graph[posOfNode].adjacenyList[counter]->number); //get the pos in vector of the node (from the adjacency list of last node)
+            if(g.graph[posOfNode2].visited==false) //if it hasnt been visited
             {
-                queueBFS.push_back(posOfNode2);
+                queueBFS.push_back(posOfNode2); //add to queue
                 textFile << g.graph[posOfNode2].number << " ";
-                g.graph[posOfNode2].visited = true;
+                g.graph[posOfNode2].visited = true; //set as true
             }
         }
     }
@@ -153,17 +152,17 @@ void BFS(Graph g, int node)
 Graph actionDFS(Graph g, int node, int posOfNode)
 {
     ofstream textFile;
-    g.graph[posOfNode].visited = true;
-    textFile.open("pathDFS.txt", std::ios_base::app);
+    g.graph[posOfNode].visited = true; //set current node as visited
+    textFile.open("pathDFS.txt", std::ios_base::app); 
     textFile << node << " ";
     textFile.close();
     
-    for(auto counter = 0; counter < g.graph[posOfNode].adjacenyList.size(); counter++)
+    for(auto counter = 0; counter < g.graph[posOfNode].adjacenyList.size(); counter++) //for each node in this nodes adjacency list
     {
         int posOfNode2 = g.findPosOfNode(g.graph[posOfNode].adjacenyList[counter]->number); // HAS TO BE NEW VARIABLE AS TO NOT MESS WITH THE FOR LOOP BEFORE
-        if(g.graph[posOfNode2].visited==false)
+        if(g.graph[posOfNode2].visited==false) //if the node in question has not been visited
         {
-            g = actionDFS(g, g.graph[posOfNode2].number, posOfNode2);
+            g = actionDFS(g, g.graph[posOfNode2].number, posOfNode2); //call this function
         }
     }
     return g;
@@ -178,7 +177,7 @@ bool DFS(Graph g, int firstNode)
     }
     g = actionDFS(g, firstNode, posOfNode);
     
-    for(auto counter2 = 0; counter2<g.graph.size(); counter2++)
+    for(auto counter2 = 0; counter2<g.graph.size(); counter2++) //if one isnt visited retur false (not connected)
     {
         if(g.graph[counter2].visited==false)
         {
