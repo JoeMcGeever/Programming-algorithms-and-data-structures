@@ -13,7 +13,7 @@ struct Node
 public:
     int number;
     bool visited = false;
-    vector<Node*> adjacenyList;
+    vector<pair <Node*, int> > adjacenyList; //pair - one holding a pointer for the node, the other bein an integer for the weight
 	Node(int number)
     {
 		this->number = number;
@@ -24,13 +24,13 @@ class Graph
 {
     public:
     vector<Node> graph;
-    void addNode(int value)
+    void addNode(int value) //adds a node to the graph vector
     {
         Node node = Node(value);
         graph.push_back(node);
         return;
     }
-    int findPosOfNode(int value)
+    int findPosOfNode(int value) //returns the position of the node in the vector
     {
         for(auto counter = 0; counter<graph.size(); counter++)
         {
@@ -41,14 +41,14 @@ class Graph
         }
         return 1000;
     }
-    void addEdge(int value1, int value2)
+    void addEdge(int value1, int value2, int weight)
     {
         int pos1 = findPosOfNode(value1);
         int pos2 = findPosOfNode(value2);
         Node* node = &graph[pos1]; //sets node to be a pointer to the node in the graph
-        graph[pos2].adjacenyList.push_back(node); //adds the pointer to the adjacent node
+        graph[pos2].adjacenyList.push_back(make_pair(node, weight)); //adds the pointer to the adjacent node
         node = &graph[pos2]; //same for the next
-        graph[pos1].adjacenyList.push_back(node);
+        graph[pos1].adjacenyList.push_back(make_pair(node, weight));
     }
     
     bool isPathNodeFinder(int value1, int value2)
@@ -77,7 +77,7 @@ class Graph
         string fileAdd;
         for(auto counter = 0; counter < v.adjacenyList.size(); counter++) //loop through v's adjacenyList
         {
-            if(w.number == v.adjacenyList[counter]->number) //if the node is foudn within this v's adjacency list
+            if(w.number == v.adjacenyList[counter].first->number) //if the node is foudn within this v's adjacency list
             {
                 textFile.open("graphText.txt", std::ios_base::app); //APPENDS TO THE END OF THE FILE
                 fileAdd = to_string(w.number); //ADD TO THE TEXT FILE
@@ -89,11 +89,11 @@ class Graph
         
         for(auto counter = 0; counter < v.adjacenyList.size(); counter++)
         {
-            int posOfNode = findPosOfNode(v.adjacenyList[counter]->number); //fidn the position of hte node in the graph vector from the adjacenyList
+            int posOfNode = findPosOfNode(v.adjacenyList[counter].first->number); //fidn the position of hte node in the graph vector from the adjacenyList
             if(graph[posOfNode].visited==false) //only does this when the node in question hasnt already been observed
             {
                 graph[posOfNode].visited=true; // sets visited to be true so its not visited again
-                int posOfNode = findPosOfNode(v.adjacenyList[counter]->number); //find the position of the node in the graph vector
+                int posOfNode = findPosOfNode(v.adjacenyList[counter].first->number); //find the position of the node in the graph vector
                 if(isPath(graph[posOfNode], w)==true) //returns true only when the deeper level of recursion returns true for values in v's adjacency list
                 {
                     textFile.open("graphText.txt", std::ios_base::app);
@@ -110,8 +110,6 @@ class Graph
     }
     
 };
-
-
 
 void BFS(Graph g, int node)
 {
@@ -135,7 +133,7 @@ void BFS(Graph g, int node)
         queueBFS.erase(queueBFS.begin()); //and delete it from the queue
         for(counter = 0; counter<g.graph[posOfNode].adjacenyList.size(); counter ++) //loop through the nodes adjacency list
         {
-            posOfNode2 = g.findPosOfNode(g.graph[posOfNode].adjacenyList[counter]->number); //get the pos in vector of the node (from the adjacency list of last node)
+            posOfNode2 = g.findPosOfNode(g.graph[posOfNode].adjacenyList[counter].first->number); //get the pos in vector of the node (from the adjacency list of last node)
             if(g.graph[posOfNode2].visited==false) //if it hasnt been visited
             {
                 queueBFS.push_back(posOfNode2); //add to queue
@@ -159,7 +157,7 @@ Graph actionDFS(Graph g, int node, int posOfNode)
     
     for(auto counter = 0; counter < g.graph[posOfNode].adjacenyList.size(); counter++) //for each node in this nodes adjacency list
     {
-        int posOfNode2 = g.findPosOfNode(g.graph[posOfNode].adjacenyList[counter]->number); // HAS TO BE NEW VARIABLE AS TO NOT MESS WITH THE FOR LOOP BEFORE
+        int posOfNode2 = g.findPosOfNode(g.graph[posOfNode].adjacenyList[counter].first->number); // HAS TO BE NEW VARIABLE AS TO NOT MESS WITH THE FOR LOOP BEFORE
         if(g.graph[posOfNode2].visited==false) //if the node in question has not been visited
         {
             g = actionDFS(g, g.graph[posOfNode2].number, posOfNode2); //call this function
@@ -213,14 +211,14 @@ int main()
     myGraph.addNode(7);
     myGraph.addNode(22);
     myGraph.addNode(23);
-    myGraph.addEdge(3, 5);
-    myGraph.addEdge(10, 5);
-    myGraph.addEdge(10, 1);
-    myGraph.addEdge(1, 4);
-    myGraph.addEdge(3, 1);
-    myGraph.addEdge(7, 5);
-    myGraph.addEdge(7, 22);
-    myGraph.addEdge(7, 23);
+    myGraph.addEdge(3, 5, 0);
+    myGraph.addEdge(10, 5, 0);
+    myGraph.addEdge(10, 1, 0);
+    myGraph.addEdge(1, 4, 0);
+    myGraph.addEdge(3, 1, 0);
+    myGraph.addEdge(7, 5, 0);
+    myGraph.addEdge(7, 22, 0);
+    myGraph.addEdge(7, 23, 0);
 
     if(myGraph.isPathNodeFinder(4, 3)==true)
     {
