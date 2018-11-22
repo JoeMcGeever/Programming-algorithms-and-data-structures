@@ -114,24 +114,11 @@ class Graph
     
 };
 
-void printForJoe(map<int, int> distance)
-{
-    cout  << distance.find(3)->second << endl;
-    cout  << distance.find(5)->second << endl;
-    cout  << distance.find(1)->second << endl;
-    cout  << distance.find(10)->second << endl;
-    cout  << distance.find(4)->second << endl;
-    cout  << distance.find(7)->second << endl;
-    cout  << distance.find(22)->second << endl;
-    cout  << distance.find(23)->second << endl;
-}
 
 void shortestPath(Graph g, int node, int destination)
 {
-    //https://brilliant.org/wiki/dijkstras-short-path-finder/
-    //QUEUE VECTOR IS WRONG
     
-    map<int, int> distance; //First integer holds the position of the node in question (in the graph array), second holds tentative weight
+    map<int, int> distance; //First integer holds the nodes number , second holds tentative weight from source
     vector<int> queue;
     int counter, neighbourNode, weight, buffer; //holds the min value in main while loop to decide minimum value
     
@@ -150,10 +137,9 @@ void shortestPath(Graph g, int node, int destination)
         {
             distance[g.graph[counter].number] =  (numeric_limits<int>::max())-15000; //set to equal infinity (-15000 to allow infinity + something to still be a large number)
         }
-        queue.push_back(counter); //HERE COUNTER HOLDS 0,1,2,3,4...
+        queue.push_back(counter); //HERE COUNTER HOLDS 0,1,2,3,4... this is to mirror the g.graph vector node position in the vector
     }
 
-    //INCORRECT HERE ONWARDS
     while(!queue.empty())
     {
         buffer = numeric_limits<int>::max();
@@ -166,11 +152,6 @@ void shortestPath(Graph g, int node, int destination)
                 node = queue[counter]; //and sets the node in question to be that
             }
         }
-        //
-        cout << node << " " << g.graph[node].number << " IS now visited" << endl;
-        
-        
-        //
         
         queue.erase(remove(queue.begin(), queue.end(), node), queue.end()); //deletes this node from the queue (uses std::algorithm)
         g.graph[node].visited = true; //USED TO REFERENCE IF IT IS NO LONGER IN THE QUEUE
@@ -179,16 +160,16 @@ void shortestPath(Graph g, int node, int destination)
             
             neighbourNode = g.graph[node].adjacenyList[counter].first->number;
             
-            if(g.graph[g.findPosOfNode(neighbourNode)].visited==true) //if removed from tree
+            if(g.graph[g.findPosOfNode(neighbourNode)].visited==true) //if already removed from the queue
             {
                 continue;
             }
             
             weight = g.graph[node].adjacenyList[counter].second; //.second holds the weight of the edge
-            buffer = distance.find(g.graph[node].number)->second + weight;
-            if(buffer < distance.find(neighbourNode)->second)
+            buffer = distance.find(g.graph[node].number)->second + weight; //holds the new tentative value for weight
+            if(buffer < distance.find(neighbourNode)->second) //if a smaller path is found
             {
-                distance[neighbourNode] = buffer;
+                distance[neighbourNode] = buffer; //this becomes the new path
             }
         }
     }
