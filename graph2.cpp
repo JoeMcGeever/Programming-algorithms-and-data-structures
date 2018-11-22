@@ -2,6 +2,9 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <limits>
+#include <map>
+#include <algorithm>
 using namespace std;
 
 //NEED TO DO:
@@ -39,7 +42,7 @@ class Graph
                 return counter;
             }
         }
-        return 1000;
+        return numeric_limits<int>::max();
     }
     void addEdge(int value1, int value2, int weight)
     {
@@ -110,6 +113,92 @@ class Graph
     }
     
 };
+
+void printForJoe(map<int, int> distance)
+{
+    cout  << distance.find(3)->second << endl;
+    cout  << distance.find(5)->second << endl;
+    cout  << distance.find(1)->second << endl;
+    cout  << distance.find(10)->second << endl;
+    cout  << distance.find(4)->second << endl;
+    cout  << distance.find(7)->second << endl;
+    cout  << distance.find(22)->second << endl;
+    cout  << distance.find(23)->second << endl;
+}
+
+void shortestPath(Graph g, int node, int destination)
+{
+    //https://brilliant.org/wiki/dijkstras-short-path-finder/
+    //QUEUE VECTOR IS WRONG
+    
+    map<int, int> distance; //First integer holds the position of the node in question (in the graph array), second holds tentative weight
+    vector<int> queue;
+    int counter, neighbourNode, weight, buffer; //holds the min value in main while loop to decide minimum value
+    
+    distance[node] = 0;
+    
+    for(counter = 0; counter < g.graph.size(); counter ++) //resets the visited values
+    {
+         g.graph[counter].visited = false;
+    }
+    
+    
+    
+    for(counter = 0; counter < g.graph.size(); counter++) 
+    {
+        if(g.graph[counter].number != node)
+        {
+            distance[g.graph[counter].number] =  (numeric_limits<int>::max())-15000; //set to equal infinity (-15000 to allow infinity + something to still be a large number)
+        }
+        queue.push_back(counter); //HERE COUNTER HOLDS 0,1,2,3,4...
+    }
+
+    //INCORRECT HERE ONWARDS
+    while(!queue.empty())
+    {
+        buffer = numeric_limits<int>::max();
+        for(counter = 0; counter<queue.size(); counter++) //loops through
+        {
+            if(distance.find(g.graph[queue[counter]].number)->second < buffer) //to find
+            {
+                buffer = distance.find(g.graph[queue[counter]].number)->second; //the smallest value
+                cout << buffer << endl;
+                node = queue[counter]; //and sets the node in question to be that
+            }
+        }
+        //
+        cout << node << " " << g.graph[node].number << " IS now visited" << endl;
+        
+        
+        //
+        
+        queue.erase(remove(queue.begin(), queue.end(), node), queue.end()); //deletes this node from the queue (uses std::algorithm)
+        g.graph[node].visited = true; //USED TO REFERENCE IF IT IS NO LONGER IN THE QUEUE
+        for(counter = 0; counter < g.graph[node].adjacenyList.size(); counter++)
+        {
+            
+            neighbourNode = g.graph[node].adjacenyList[counter].first->number;
+            
+            if(g.graph[g.findPosOfNode(neighbourNode)].visited==true) //if removed from tree
+            {
+                continue;
+            }
+            
+            weight = g.graph[node].adjacenyList[counter].second; //.second holds the weight of the edge
+            buffer = distance.find(g.graph[node].number)->second + weight;
+            if(buffer < distance.find(neighbourNode)->second)
+            {
+                distance[neighbourNode] = buffer;
+            }
+        }
+    }
+    
+    destination = g.findPosOfNode(destination);
+    
+    printForJoe(distance);
+
+     
+}
 
 void BFS(Graph g, int node)
 {
@@ -202,6 +291,8 @@ bool isConnected(Graph G)
 
 int main()
 {
+    
+    
     Graph myGraph;
     myGraph.addNode(3);
     myGraph.addNode(5);
@@ -211,14 +302,15 @@ int main()
     myGraph.addNode(7);
     myGraph.addNode(22);
     myGraph.addNode(23);
-    myGraph.addEdge(3, 5, 0);
-    myGraph.addEdge(10, 5, 0);
-    myGraph.addEdge(10, 1, 0);
-    myGraph.addEdge(1, 4, 0);
-    myGraph.addEdge(3, 1, 0);
-    myGraph.addEdge(7, 5, 0);
-    myGraph.addEdge(7, 22, 0);
-    myGraph.addEdge(7, 23, 0);
+    myGraph.addEdge(3, 5, 1);
+    myGraph.addEdge(10, 5, 1);
+    myGraph.addEdge(10, 1, 1);
+    myGraph.addEdge(1, 4, 1);
+    myGraph.addEdge(3, 1, 1);
+    myGraph.addEdge(7, 5, 1);
+    myGraph.addEdge(7, 22, 1);
+    myGraph.addEdge(7, 23, 1);
+    myGraph.addEdge(4, 23, 1);
 
     if(myGraph.isPathNodeFinder(4, 3)==true)
     {
@@ -237,5 +329,8 @@ int main()
     }
     BFS(myGraph, choice);
     
+    
+    
+    shortestPath(myGraph, 10, 10);
     
 }
