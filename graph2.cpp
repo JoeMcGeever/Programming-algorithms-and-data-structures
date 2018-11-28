@@ -148,7 +148,6 @@ void shortestPath(Graph g, int node, int destination)
             if(distance.find(g.graph[queue[counter]].number)->second < buffer) //to find
             {
                 buffer = distance.find(g.graph[queue[counter]].number)->second; //the smallest value
-                cout << buffer << endl;
                 node = queue[counter]; //and sets the node in question to be that
             }
         }
@@ -174,9 +173,8 @@ void shortestPath(Graph g, int node, int destination)
         }
     }
     
-    destination = g.findPosOfNode(destination);
     
-    printForJoe(distance);
+    cout << "The shortest distance to the source node is :" << distance.find(destination)->second << endl;
 
      
 }
@@ -284,13 +282,13 @@ int main()
     myGraph.addNode(22);
     myGraph.addNode(23);
     myGraph.addEdge(3, 5, 1);
-    myGraph.addEdge(10, 5, 1);
-    myGraph.addEdge(10, 1, 1);
-    myGraph.addEdge(1, 4, 1);
+    myGraph.addEdge(10, 5, 5);
+    myGraph.addEdge(10, 1, 6);
+    myGraph.addEdge(1, 4, 7);
     myGraph.addEdge(3, 1, 1);
-    myGraph.addEdge(7, 5, 1);
-    myGraph.addEdge(7, 22, 1);
-    myGraph.addEdge(7, 23, 1);
+    myGraph.addEdge(7, 5, 10);
+    myGraph.addEdge(7, 22, 9);
+    myGraph.addEdge(7, 23, 8);
     myGraph.addEdge(4, 23, 1);
 
     if(myGraph.isPathNodeFinder(4, 3)==true)
@@ -312,6 +310,6 @@ int main()
     
     
     
-    shortestPath(myGraph, 10, 10);
+    shortestPath(myGraph, 10, 23);
     
 }
