@@ -7,16 +7,13 @@
 #include <algorithm>
 using namespace std;
 
-//NEED TO DO:
-//dijkstras algorithm for weighted graph
-//FOR DIJKSTRAS ALGORITHM - USE MAX(INT) INSETAD OF INFINITY
 
 struct Node
 {
 public:
     int number;
     bool visited = false;
-    vector<pair <Node*, int> > adjacenyList; //pair - one holding a pointer for the node, the other bein an integer for the weight
+    vector<pair <Node*, int> > adjacenyList; //pair - one holding a pointer for the node, the other being an integer for the weight
 	Node(int number)
     {
 		this->number = number;
@@ -33,7 +30,7 @@ class Graph
         graph.push_back(node);
         return;
     }
-    int findPosOfNode(int value) //returns the position of the node in the vector
+    int findPosOfNode(int value) //returns the position of the node in the vector from an input of the nodes value
     {
         for(auto counter = 0; counter<graph.size(); counter++)
         {
@@ -44,7 +41,7 @@ class Graph
         }
         return numeric_limits<int>::max();
     }
-    void addEdge(int value1, int value2, int weight)
+    void addEdge(int value1, int value2, int weight) //adds an edge between 2 given values (nodes value) and adds its weight
     {
         int pos1 = findPosOfNode(value1);
         int pos2 = findPosOfNode(value2);
@@ -54,7 +51,7 @@ class Graph
         graph[pos1].adjacenyList.push_back(make_pair(node, weight));
     }
     
-    bool isPathNodeFinder(int value1, int value2)
+    bool isPathNodeFinder(int value1, int value2) //returns true if there is a path
     {
         ofstream textFile;
         int pos1 = findPosOfNode(value1);
@@ -74,7 +71,7 @@ class Graph
         return pathResult;
     }
     
-    bool isPath(Node v, Node w)
+    bool isPath(Node v, Node w) //returns true if there is a path between 2 node values -- same as above but allows for recu rsion (one above resets visitedvalues)
     {
         ofstream textFile;
         string fileAdd;
@@ -115,7 +112,7 @@ class Graph
 };
 
 
-void shortestPath(Graph g, int node, int destination)
+void shortestPath(Graph g, int node, int destination) //functin prints the shortest distance number between 2 node values from a graph
 {
     
     map<int, int> distance; //First integer holds the nodes number , second holds tentative weight from source
@@ -179,7 +176,7 @@ void shortestPath(Graph g, int node, int destination)
      
 }
 
-void BFS(Graph g, int node)
+void BFS(Graph g, int node) //Does a bredth first search on a graph from a starting node
 {
     ofstream textFile;
     vector<int> queueBFS;
@@ -215,7 +212,7 @@ void BFS(Graph g, int node)
     
 }
 
-Graph actionDFS(Graph g, int node, int posOfNode)
+Graph actionDFS(Graph g, int node, int posOfNode) //allows for recursion in DFS
 {
     ofstream textFile;
     g.graph[posOfNode].visited = true; //set current node as visited
@@ -234,7 +231,7 @@ Graph actionDFS(Graph g, int node, int posOfNode)
     return g;
 }
 
-bool DFS(Graph g, int firstNode)
+bool DFS(Graph g, int firstNode) //Performs a depth first search on a graph from a starting node (returns true if connected for isConnected function)
 {
     int posOfNode = g.findPosOfNode(firstNode);
     for(auto counter = 0; counter < g.graph.size(); counter ++) //resets the visited values
@@ -253,7 +250,7 @@ bool DFS(Graph g, int firstNode)
     return true;
 }
 
-bool isConnected(Graph G)
+void isConnected(Graph G) //prints whether the graph is connnected or not (uses DFS)
 {
     int choice;
     cout << "Choose your starting node" << endl;

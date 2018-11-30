@@ -2,7 +2,6 @@
 #include <fstream>
 #include <cctype>
 #include <iostream>
-#include <vector>
 using namespace std;
 
 //alphabetically store using ascii values to determine position(capital letters should not affect)
@@ -27,7 +26,7 @@ public:
 };
 
 
-Node* addNewNode(Node* node, string word)
+Node* addNewNode(Node* node, string word) //adds a new node to the tree (from starting node) with a word
 {
     
     if(node==NULL) //creates the node if there are no node present at this point
@@ -93,7 +92,7 @@ Node* addNewNode(Node* node, string word)
     return node;
 }
 
-Node* constructTree()
+Node* constructTree() //constructs the binary tree from a text file and returns a node pointer
 {
     ifstream textFile;
     textFile.open("textFile.txt");
@@ -121,7 +120,7 @@ Node* constructTree()
 }
 
 
-Node* findWord(Node* node, string word)
+Node* findWord(Node* node, string word) //returns the node pointer in teh tree from a word
 {
     char asciiFinder, asciiCompare;
     int letterCounter = 0;
@@ -164,7 +163,7 @@ Node* findWord(Node* node, string word)
     }
 }
 
-void preOrder(Node* binaryTree)
+void preOrder(Node* binaryTree) //prints the tree in preOrder
 {
 
    
@@ -184,10 +183,10 @@ void preOrder(Node* binaryTree)
 }
 
 
-void deleteNode(Node* node, string word)
+void deleteNode(Node* node, string word) //deletes a node form the tree 
 {
     
-    node = findWord(node, word);
+    node = findWord(node, word); //finds the node to be deleted
     if(node->leftChild == NULL && node->rightChild == NULL) //no children
     {
         if(node->parentNode->leftChild->word == node->word) //if the node is the left child
